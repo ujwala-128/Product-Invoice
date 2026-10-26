@@ -1,0 +1,32 @@
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                echo 'Source code checked out successfully'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'if exist README.md (echo Build step successful) else (exit /b 1)'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'if exist README.md (echo Test passed) else (exit /b 1)'
+            }
+        }
+
+        stage('Archive Artifacts') {
+            steps {
+                archiveArtifacts artifacts: 'README.md',
+                                 fingerprint: true
+            }
+        }
+    }
+}
